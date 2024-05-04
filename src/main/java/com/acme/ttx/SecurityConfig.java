@@ -54,7 +54,7 @@ interface SecurityConfig {
             .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
             .httpBasic(withDefaults())
             .formLogin(AbstractHttpConfigurer::disable)
-            .csrf(AbstractHttpConfigurer::disable) // NOSNAR
+            .csrf(AbstractHttpConfigurer::disable) // NOSONAR
             .headers(headers -> headers.frameOptions(FrameOptionsConfig::sameOrigin))
             .build();
     }

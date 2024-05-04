@@ -1,6 +1,6 @@
 # ttx
 
-![Version: 2024.4.0](https://img.shields.io/badge/Version-2024.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2024.04.0-buildpacks](https://img.shields.io/badge/AppVersion-2024.04.0--buildpacks-informational?style=flat-square)
+![Version: 2024.4.0](https://img.shields.io/badge/Version-2024.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2024.04.0-buildpacks-azul](https://img.shields.io/badge/AppVersion-2024.04.0--buildpacks--azul-informational?style=flat-square)
 
 Helm Chart für Studenten
 

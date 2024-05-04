@@ -1,81 +1,31 @@
 package com.acme.ttx.repository;
 
-import com.acme.ttx.entity.Adresse;
-import com.acme.ttx.entity.Guthaben;
 import com.acme.ttx.entity.ModuleType;
-import com.acme.ttx.entity.SemesterType;
 import com.acme.ttx.entity.Student;
 import jakarta.validation.constraints.NotNull;
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Currency;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.UUID;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
-import static com.acme.ttx.entity.ModuleType.MATHEMATIK_1;
-import static com.acme.ttx.entity.ModuleType.MATHEMATIK_2;
-import static com.acme.ttx.entity.ModuleType.SOFTWAREARCHITEKTUR;
-import static com.acme.ttx.entity.ModuleType.SOFTWAREENGINEERING;
+import static com.acme.ttx.repository.DB.STUDENTEN;
 import static java.util.Collections.emptyList;
+import static java.util.UUID.randomUUID;
 
 /**
  * Mock-Klasse für den DB-Zugriff.
  */
 @Repository
 @Slf4j
+@SuppressWarnings("PublicConstructor")
 public class StudentRepository {
-    private static final int JAHR = 2000;
-    private static final int MONAT = 7;
-    private static final int TAG = 12;
-    private static final double BETRAG = 10.0;
-    private static final List<Student> STUDENTEN = Stream.of(
-        Student.builder()
-            .matrikelnummer(UUID.fromString("00000000-0000-0000-0000-000000000001"))
-            .name("Max")
-            .nachname("Hahn")
-            .adresse(Adresse.builder()
-                .strasse("Theodore straße")
-                .ort("Mannheim")
-                .plz("67061")
-                .build())
-            .geburtsdatum(LocalDate.of(JAHR, MONAT, TAG))
-            .guthaben(List.of(
-                Guthaben.builder()
-                    .betrag(BigDecimal.valueOf(BETRAG))
-                    .waehrung(Currency.getInstance("EUR"))
-                    .build())
-            )
-            .semester(SemesterType.SEMESTER_3)
-            .module(List.of(SOFTWAREENGINEERING, MATHEMATIK_2))
-            .build(),
-        Student.builder()
-            .matrikelnummer(UUID.fromString("00000000-0000-0000-0000-000000000002"))
-            .name("Thomas")
-            .nachname("Müller")
-            .adresse(Adresse.builder()
-                .strasse("Leibnizstraße")
-                .ort("München")
-                .plz("86445")
-                .build())
-            .geburtsdatum(LocalDate.of(JAHR, MONAT, TAG))
-            .guthaben(List.of(
-                Guthaben.builder()
-                    .betrag(BigDecimal.valueOf(BETRAG))
-                    .waehrung(Currency.getInstance("EUR"))
-                    .build())
-            )
-            .semester(SemesterType.SEMESTER_3)
-            .module(List.of(MATHEMATIK_1, SOFTWAREARCHITEKTUR))
-            .build()
-    ).toList();
 
     /**
      * Alle Studenten als Collection ermitteln, wie sie später auch in der DB vorkommen.
@@ -144,6 +94,21 @@ public class StudentRepository {
             .findFirst();
         log.debug("findByEmail: {}", result);
         return result;
+    }
+
+    /**
+     * Abfrage, ob es einen Studenten mit gegebener E-Mail-Adresse gibt.
+     *
+     * @param email E-Mail-Adresse für die Suche
+     * @return true, falls es einen solchen Studenten gibt.
+     */
+    public boolean isEmailExisting(final String email) {
+        log.debug("isEmailExisting: email={}", email);
+        final var result = STUDENTEN.stream()
+            .filter(student -> student.getEmail().contentEquals(email))
+            .count();
+        log.debug("isEmailExisting: result={}", result);
+        return result > 0L;
     }
 
     /**
@@ -228,5 +193,38 @@ public class StudentRepository {
         }
 
         return emptyList();
+    }
+
+    /**
+     * Einen Studenten anlegen.
+     *
+     * @param student Das Objekt des neu anzulegenden Studenten
+     * @return Der neu angelegte Student mit generierter Matrikelnummer
+     */
+    public @NonNull Student create(final @NonNull Student student) {
+        log.debug("create: {}", student);
+        student.setMatrikelnummer(randomUUID());
+        STUDENTEN.add(student);
+        log.debug("created: {}", student);
+        return student;
+    }
+
+    /**
+     * Einen vorhandenen Studenten aktualisieren.
+     *
+     * @param student Das Obkelt mit den neuen Daten
+     */
+    public void update(final @NonNull Student student) {
+        log.debug("update: {}", student);
+        final OptionalInt index = IntStream
+            .range(0, STUDENTEN.size())
+            .filter(i -> Objects.equals(STUDENTEN.get(i).getMatrikelnummer(), student.getMatrikelnummer()))
+            .findFirst();
+        log.trace("update: index={}", student);
+        if (index.isEmpty()) {
+            return;
+        }
+        STUDENTEN.set(index.getAsInt(), student);
+        log.debug("update: {}", student);
     }
 }

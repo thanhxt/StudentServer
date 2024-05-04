@@ -21,7 +21,7 @@
 
 # "Param" muss in der 1. Zeile sein
 Param (
-  [string]$base = 'buildpacks'
+  [string]$base = 'buildpacks-azul'
 )
 
 Set-StrictMode -Version Latest

@@ -21,7 +21,7 @@ public final class NotFoundException extends RuntimeException {
     private final Map<String, List<String>> suchkriterien;
 
     NotFoundException(final UUID matrikelnummer) {
-        super(STR."Kein Studenten mit der Matrikelnummer \{matrikelnummer} gefunden");
+        super("Kein Studenten mit der Matrikelnummer " + matrikelnummer + " gefunden");
         this.matrikelnummer = matrikelnummer;
         this.suchkriterien = null;
     }
@@ -31,4 +31,5 @@ public final class NotFoundException extends RuntimeException {
         matrikelnummer = null;
         this.suchkriterien = suchkriterien;
     }
+
 }
