@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 
 /**
  * Anwendungslogik für Kunden auch mit Bean Validation.
+ * <img src="../../../../../../../extras/doc/StudentWriteService.png" alt="Klassendiagramm">
  */
 @Service
 @Validated

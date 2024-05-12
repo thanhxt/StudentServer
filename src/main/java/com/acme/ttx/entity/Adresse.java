@@ -24,19 +24,15 @@ public class Adresse {
     /**
      * Postleitzahl für eine Adresse.
      */
-    @NotNull
-    @Pattern(regexp = PLZ_PATTERN)
     private String plz;
 
     /**
      * Ort für eine Adresse.
      */
-    @NotBlank
     private String ort;
 
     /**
      * Strasse für die Adresse.
      */
-    @NotBlank
     private String strasse;
 }

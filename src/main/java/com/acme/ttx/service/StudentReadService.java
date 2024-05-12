@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * Anwendungslogik für den Studenten.
+ * <img src="../../../../../../../extras/doc/StudentReadService.png" alt="Klassendiagramm">
  */
 @Service
 @RequiredArgsConstructor

@@ -1,11 +1,14 @@
 package com.acme.ttx.rest;
 
+import com.acme.ttx.rest.StudentDTO.OnCreate;
 import com.acme.ttx.service.EmailExistsException;
 import com.acme.ttx.service.StudentWriteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Valid;
+import jakarta.validation.groups.Default;
 import java.net.URI;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +35,7 @@ import static org.springframework.http.ResponseEntity.created;
 /**
  * Eine Controller-Klasse bildet die REST-Schnittstelle, wobei die HTTP-Methoden, Pfade und MIME-Typen auf die
  * Methoden der Klasse abgebildet werden.
+ * <img src="../../../../../../../extras/doc/StudentWriteController.png" alt="Klassendiagramm">
  */
 @Controller
 @RequestMapping(REST_PATH)
@@ -60,7 +65,7 @@ class StudentWriteController {
     @ApiResponse(responseCode = "400", description = "Syntaktische Fehler im Request-Body")
     @ApiResponse(responseCode = "422", description = "Ungültige Werte oder Email vorhanden")
     ResponseEntity<Void> post(
-        @RequestBody final StudentDTO studentDTO, final HttpServletRequest request) {
+        @RequestBody @Validated ({Default.class, OnCreate.class})final StudentDTO studentDTO, final HttpServletRequest request) {
         log.debug("post: {}", studentDTO);
 
         final var studentInput = mapper.toStudent(studentDTO);
@@ -82,7 +87,9 @@ class StudentWriteController {
     @ApiResponse(responseCode = "400", description = "Syntaktische Fehler im Request-Body")
     @ApiResponse(responseCode = "404", description = "Student nicht vorhanden")
     @ApiResponse(responseCode = "422", description = "Ungültige Werte oder Email vorhanden")
-    void put(@PathVariable final UUID matrikelnummer,  @RequestBody final StudentDTO studentDTO) {
+    void put(
+        @PathVariable final UUID matrikelnummer,
+        @RequestBody @Valid final StudentDTO studentDTO) {
         log.debug("put: matrikelnummer={}, {}", matrikelnummer, studentDTO);
         final var studentInput = mapper.toStudent(studentDTO);
         service.update(studentInput, matrikelnummer);

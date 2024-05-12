@@ -18,24 +18,14 @@ import org.hibernate.validator.constraints.UniqueElements;
 
 /**
  * Daten eines Studenten.
+ * <img src="../../../../../../../extras/doc/Student.png" alt="Klassendiagramm">
+ *
  */
 @Builder
 @Getter
 @Setter
 @ToString
 public class Student {
-    /**
-     * Muster für einen gültigen Nachnamen.
-     */
-    public static final String NACHNAME_PATTERN =
-        "(o'|von|von der|von und zu|van)?[A-ZÄÖÜ][a-zäöüß]+(-[A-ZÄÖÜ][a-zäöüß]+)?";
-
-    /**
-     * Muster für einen gültigen Vornmen.
-     */
-    public static final String VORNAME_PATTERN =
-        "[A-ZÄÖÜ][a-zäöüß]+(-[A-ZÄÖÜ][a-zäöüß]+)?";
-
     /**
      * Die Matrikelnummer des Studenten.
      */
@@ -45,34 +35,26 @@ public class Student {
     /**
      * Nachname des Studenten.
      */
-    @NotNull
-    @Pattern(regexp = NACHNAME_PATTERN)
     private String nachname;
 
     /**
      * Vorname des Studenten.
      */
-    @NotNull
-    @Pattern(regexp = VORNAME_PATTERN)
     private String name;
 
     /**
      * Email des Studenten.
      */
-    @Email
     private String email;
 
     /**
      * Das Geburtsdatum des Kunden.
      */
-    @Past
     private LocalDate geburtsdatum;
 
     /**
      * Die Adresse des Kunden.
      */
-    @Valid
-    @NotNull
     @ToString.Exclude
     private Adresse adresse;
 
@@ -91,7 +73,6 @@ public class Student {
     /**
      * Belegte Module des Studenten.
      */
-    @UniqueElements
     @ToStringExclude
     private List<ModuleType> module;
 }
