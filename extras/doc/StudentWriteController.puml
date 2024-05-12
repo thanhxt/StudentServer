@@ -1,0 +1,82 @@
+@startuml StudentWriteController
+
+skinparam classAttributeIconSize 0
+
+package org.springframework {
+package stereotype {
+        interface "@Controller" as Controller
+    }
+
+    package web.bind.annotation {
+        interface "@RequestMapping" as RequestMapping
+        interface "@PathVariable" as PathVariable
+        interface "@RequestBody" as RequestBody
+        interface "@ExceptionHandler" as ExceptionHandler
+    }
+
+    package http {
+        class ResponseEntity<T>
+        class ProblemDetail
+
+        package converter {
+            class HttpMessageNotReadableException
+        }
+
+        ResponseEntity .[hidden].> ProblemDetail
+        ProblemDetail .[hidden].> HttpMessageNotReadableException
+    }
+}
+
+package jakarta.servlet.http {
+    interface HttpServletRequest
+}
+
+package java.util {
+    interface Collection<T>
+    class UUID
+
+    UUID .up[hidden].> Collection
+    Collection .up[hidden].> HttpServletRequest
+}
+
+package com.acme.ttx {
+    package service {
+        class StudentWriteService << control >> << @Service >>
+
+        class ConstraintViolationsException
+        class EmailExistsException
+    }
+
+    package rest #DDDDDD {
+        class StudentDTO <<entity>>
+
+        class StudentWriteController << boundary >> << @Controller >> << @RequestMapping >> {
+            + @PostMapping post(@RequestBody StudentDTO: StudentDTO, request: HttpServletRequest): ResponseEntity<Void>
+            + @PutMapping put(@PathVariable matrikelnummer: UUID, @RequestBody StudentDTO: StudentDTO)
+            + @ExceptionHandler onConstraintViolations(ex: ConstraintViolationsException, req: HttpServletRequest): ProblemDetail
+            + @ExceptionHandler onEmailExists(ex: EmailExistsException, req: HttpServletRequest): ProblemDetail
+        }
+
+        StudentWriteController o-down-> "1" StudentWriteService : service
+        StudentWriteController ..> StudentDTO
+        StudentWriteController ..> ConstraintViolationsException
+        StudentWriteController ..> EmailExistsException
+
+        StudentWriteController .up.> ResponseEntity
+        StudentWriteController .up.> ProblemDetail
+        StudentWriteController .up.> HttpMessageNotReadableException
+        StudentWriteController .right.> HttpServletRequest
+
+        StudentWriteController .up.> Controller
+        StudentWriteController .up.> RequestMapping
+        StudentWriteController .up.> PathVariable
+        StudentWriteController .up.> RequestBody
+        StudentWriteController .up.> ExceptionHandler
+
+        StudentWriteController .right.> UUID
+        StudentWriteController .right.> Collection
+    }
+}
+
+hide empty members
+@enduml

@@ -1,0 +1,36 @@
+@startuml StudentWriteService
+
+skinparam classAttributeIconSize 0
+
+package org.springframework.stereotype {
+    interface Service
+}
+
+package java.util {
+    class UUID
+}
+
+package com.acme.ttx {
+    package entity {
+        class Student << entity >>
+    }
+
+    package repository {
+        class StudentRepository << control >> << @Repository >>
+    }
+
+    package service #DDDDDD {
+        class StudentWriteService << control >> << @Service >> {
+            + create(student: Student): Student
+            + update(student: Student, matrikelnummer: UUID)
+        }
+
+        StudentWriteService o--> "1" StudentRepository : repo
+        StudentWriteService .right.> Student
+        StudentWriteService .up.> Service
+        StudentWriteService .up.> UUID
+    }
+}
+
+hide empty members
+@enduml

@@ -1,0 +1,79 @@
+@startuml Student
+
+skinparam classAttributeIconSize 0
+package java {
+    package util {
+        class UUID
+        interface List<T>
+        class URL
+        class Currency
+    }
+
+    package math {
+        class BigDecimal
+    }
+
+    package time {
+        class LocalDate
+    }
+
+    BigDecimal .up[hidden].> UUID
+    UUID .[hidden].> LocalDate
+}
+
+package com.acme.ttx.entity #DDDDDD {
+    class Guthaben {
+        betrag: BigDecimal
+        waehrung: Currency
+    }
+
+    class Adresse {
+        plz: String
+        ort: String
+        strasse: String
+    }
+
+    enum ModuleType {
+        SOFTWAREARCHITEKTUR
+        SOFTWAREENGINEERING
+        PROGRAMMIEREN_1
+        PROGRAMMIEREN_2
+        MATHEMATIK_1
+        MATHEMATIK_2
+    }
+
+    enum SemesterType {
+        SEMESTER_1
+        SEMESTER_2
+        SEMESTER_3
+        SEMESTER_4
+        SEMESTER_5
+        SEMESTER_6
+        SEMESTER_7
+    }
+
+    class Student << entity >> {
+        matrikelnummer : UUID
+        nachname : String
+        name : String
+        email : String
+        geburtsdatum : LocalDate
+        module : List<ModuleType>
+    }
+
+    Student *--> "0...*" Guthaben : Guthaben
+    Student *--> "1...n" Adresse : adresse
+    Student .up.> ModuleType
+    Student .up.> SemesterType
+
+    Student ..> UUID
+    Student ..> LocalDate
+    Student ..> List
+    Student ..> URL
+
+    Guthaben ..> Currency
+    Guthaben ..> BigDecimal
+}
+
+hide empty members
+@enduml

@@ -1,0 +1,45 @@
+@startuml StudentReadService
+
+skinparam classAttributeIconSize 0
+
+package org.springframework.stereotype {
+    interface Service
+}
+
+package java.util {
+    interface List<T>
+    interface Map<K,V>
+    class UUID
+
+    UUID .left[hidden].> Service
+}
+
+package com.acme.kunde {
+    package entity {
+        class Student << entity >>
+
+        Student .up[hidden].> List
+    }
+
+    package repository {
+        class StudentRepository << control >> << @Repository >>
+    }
+
+    package service #DDDDDD {
+        class StudentReadService << control >> << @Service >> {
+            + findStudentByMatrikelnummer(matrikelnummer: UUID): Student
+            + find(queryParams: Map<String, List<String>>): List<Student>
+            + findAllStudents(): Collection<Student>
+        }
+
+        StudentReadService o--> StudentRepository : repo
+        StudentReadService .right.> Student
+        StudentReadService ..> Service
+        StudentReadService .up.> UUID
+        StudentReadService .up> List
+        StudentReadService .up.> Map
+    }
+}
+
+hide empty members
+@enduml
