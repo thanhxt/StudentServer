@@ -1,0 +1,7 @@
+com.acme.ttx
+com.acme.ttx.controller
+com.acme.ttx.dev
+com.acme.ttx.entity
+com.acme.ttx.repository
+com.acme.ttx.security
+com.acme.ttx.service
