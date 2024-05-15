@@ -1,4 +1,4 @@
-package com.acme.ttx.rest;
+package com.acme.ttx.controller;
 
 import com.acme.ttx.entity.ModuleType;
 import com.acme.ttx.entity.SemesterType;
@@ -56,7 +56,7 @@ public record StudentDTO(
         "[A-ZÄÖÜ][a-zäöüß]+(-[A-ZÄÖÜ][a-zäöüß]+)?";
 
     /**
-     * Marker-Interface für Jakarta Validations: zusätzliche Validierung beim Neuanlegen
+     * Marker-Interface für Jakarta Validations: zusätzliche Validierung beim Neuanlegen.
      */
-    interface OnCreate {}
+    interface OnCreate { }
 }

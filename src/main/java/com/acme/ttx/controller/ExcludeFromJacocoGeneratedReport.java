@@ -1,4 +1,4 @@
-package com.acme.ttx.rest;
+package com.acme.ttx.controller;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

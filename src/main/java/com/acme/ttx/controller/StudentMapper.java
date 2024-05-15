@@ -1,4 +1,4 @@
-package com.acme.ttx.rest;
+package com.acme.ttx.controller;
 
 import com.acme.ttx.entity.Adresse;
 import com.acme.ttx.entity.Guthaben;
@@ -21,7 +21,7 @@ interface StudentMapper {
      * @param dto DTO-Objekt für StudentDTO ohne Matrikelnummer
      * @return Konvertiertes Studenten-Objekt mit null als Matrikelnummer
      */
-    @Mapping(target = "matrikelnummer", ignore = true)
+    @Mapping(target = "id", ignore = true)
     Student toStudent(StudentDTO dto);
 
     /**

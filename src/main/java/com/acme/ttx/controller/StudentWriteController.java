@@ -1,6 +1,6 @@
-package com.acme.ttx.rest;
+package com.acme.ttx.controller;
 
-import com.acme.ttx.rest.StudentDTO.OnCreate;
+import com.acme.ttx.controller.StudentDTO.OnCreate;
 import com.acme.ttx.service.EmailExistsException;
 import com.acme.ttx.service.StudentWriteService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,8 +25,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import static com.acme.ttx.rest.StudentGetController.MATRIKELNUMMER_PATTERN;
-import static com.acme.ttx.rest.StudentGetController.REST_PATH;
+import static com.acme.ttx.controller.StudentGetController.ID_PATTERN;
+import static com.acme.ttx.controller.StudentGetController.REST_PATH;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -46,6 +46,7 @@ class StudentWriteController {
     private static final String PROBLEM_PATH = "/problem/";
     private final StudentWriteService service;
     private final StudentMapper mapper;
+    private final UriHelper uriHelper;
 
     /**
      * Einen neuen Studenten-Datensatz anlegen.
@@ -53,9 +54,9 @@ class StudentWriteController {
      * @param studentDTO Das Studentenobjekt aus dem eingegangenen Request-Body.
      * @param request Das Request-Objekt, um 'Location' im Response-Header zu erstellen.
      * @return Response mit Statuscode 201 einschließlich Location-Header oder
-     *         Statuscode 422 falls Constraints verletzt
-     *         sind oder die Emailadresse bereits existiert oder Statuscode
-     *         400 falls syntaktische Fehler im Request-Body
+     *         Statuscode 422, falls Constraints verletzt
+     *         sind oder die E-Mail-Adresse bereits existiert oder Statuscode
+     *         400, falls syntaktische Fehler im Request-Body
      *         vorliegen.
      */
     @SneakyThrows
@@ -65,22 +66,24 @@ class StudentWriteController {
     @ApiResponse(responseCode = "400", description = "Syntaktische Fehler im Request-Body")
     @ApiResponse(responseCode = "422", description = "Ungültige Werte oder Email vorhanden")
     ResponseEntity<Void> post(
-        @RequestBody @Validated ({Default.class, OnCreate.class})final StudentDTO studentDTO, final HttpServletRequest request) {
+        @RequestBody @Validated ({Default.class, OnCreate.class})final StudentDTO studentDTO,
+        final HttpServletRequest request) {
         log.debug("post: {}", studentDTO);
 
         final var studentInput = mapper.toStudent(studentDTO);
         final var studentDB = service.create(studentInput);
-        final var location = new URI(request.getRequestURL() + "/" + studentDB.getMatrikelnummer());
+        final var baseUri = uriHelper.getBaseUri(request).toString();
+        final var location = URI.create(baseUri + '/' + studentDB.getId());
         return created(location).build();
     }
 
     /**
      * Einen vorhandenen Studenten-Datensatz überschreiben.
      *
-     * @param matrikelnummer Matrikelnummer des zu aktualisierenden Studenten.
+     * @param id Matrikelnummer des zu aktualisierenden Studenten.
      * @param studentDTO Das Studentenobjekt aus dem eingegangenen Request-Body.
      */
-    @PutMapping(path = "{matrikelnummer:" + MATRIKELNUMMER_PATTERN + "}", consumes = APPLICATION_JSON_VALUE)
+    @PutMapping(path = "{id:" + ID_PATTERN + "}", consumes = APPLICATION_JSON_VALUE)
     @ResponseStatus(NO_CONTENT)
     @Operation(summary = "Einen Studenten mit neuen Werten aktualisieren", tags = "Aktualisieren")
     @ApiResponse(responseCode = "204", description = "Aktualisiert")
@@ -88,11 +91,11 @@ class StudentWriteController {
     @ApiResponse(responseCode = "404", description = "Student nicht vorhanden")
     @ApiResponse(responseCode = "422", description = "Ungültige Werte oder Email vorhanden")
     void put(
-        @PathVariable final UUID matrikelnummer,
+        @PathVariable final UUID id,
         @RequestBody @Valid final StudentDTO studentDTO) {
-        log.debug("put: matrikelnummer={}, {}", matrikelnummer, studentDTO);
+        log.debug("put: matrikelnummer={}, {}", id, studentDTO);
         final var studentInput = mapper.toStudent(studentDTO);
-        service.update(studentInput, matrikelnummer);
+        service.update(studentInput, id);
     }
 
     @ExceptionHandler

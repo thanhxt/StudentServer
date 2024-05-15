@@ -1,4 +1,4 @@
-package com.acme.ttx.rest;
+package com.acme.ttx.controller;
 
 import com.acme.ttx.entity.Student;
 import com.acme.ttx.service.StudentReadService;
@@ -6,10 +6,9 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.UUID;
-
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import static com.acme.ttx.rest.StudentGetController.REST_PATH;
+import static com.acme.ttx.controller.StudentGetController.REST_PATH;
 import static org.springframework.hateoas.MediaTypes.HAL_JSON_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -46,7 +45,7 @@ public class StudentGetController {
     /**
      * Muster für Matrikelnummer.
      */
-    public static final String MATRIKELNUMMER_PATTERN = "[\\da-f]{8}-[\\da-f]{4}-[\\da-f]{4}-[\\da-f]{4}-[\\da-f]{12}";
+    public static final String ID_PATTERN = "[\\da-f]{8}-[\\da-f]{4}-[\\da-f]{4}-[\\da-f]{4}-[\\da-f]{12}";
 
     /**
      * Pfad um Matrikelnummer zu suchen.
@@ -59,7 +58,7 @@ public class StudentGetController {
      *
      * @return Alle Studenten
      */
-    @GetMapping(value = "matrikelnummer", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "id", produces = APPLICATION_JSON_VALUE)
     @Operation(summary = "Suche alle Studenten", tags = "Suchen")
     @ApiResponse(responseCode = "200", description = "Studenten gefunden")
     @ApiResponse(responseCode = "404", description = "kein Studenten gefunden ")
@@ -71,6 +70,7 @@ public class StudentGetController {
      * Suche alle Studenten-Matrikelnummer als Queryparameter.
      *
      * @param suchkriterien Query-Parameter als Map.
+     * @param request Das Request-Objekt, um Links für HATEOAS zu erstellen.
      * @return Gefundenen Studenten als Collection.
      */
     @GetMapping(produces = HAL_JSON_VALUE)
@@ -88,9 +88,9 @@ public class StudentGetController {
         final var models = service.find(suchkriterien)
                 .stream()
                 .map(student -> {
-                final var model = new StudentModel(student);
-                model.add(Link.of(baseUri + '/' + student.getMatrikelnummer()));
-                return model;
+                    final var model = new StudentModel(student);
+                    model.add(Link.of(baseUri + '/' + student.getId()));
+                    return model;
                 })
                     .toList();
 
@@ -98,38 +98,38 @@ public class StudentGetController {
         return CollectionModel.of(models);
     }
 
-
     /**
      * Suche alle Studenten-Matrikelnummer als Pfadparameter.
      *
-     * @param matrikelnummer Matrikelnummer des gesuchten Studenten
+     * @param id Matrikelnummer des gesuchten Studenten
+     * @param request Das Request-Objekt, um Links für HATEOAS zu erstellen.
      * @return Gefundener Student
      */
     @SuppressWarnings("java:S6856")
-    @GetMapping(path = "{matrikelnummer:" + MATRIKELNUMMER_PATTERN + "}", produces = HAL_JSON_VALUE)
-    @Operation(summary = "Suche Studenten anhand der Matrikelnummer", tags = "Suchen")
+    @GetMapping(path = "{id:" + ID_PATTERN + "}", produces = HAL_JSON_VALUE)
+    @Operation(summary = "Suche Studenten anhand der Id", tags = "Suchen")
     @ApiResponse(responseCode = "200", description = "Student gefunden")
     @ApiResponse(responseCode = "404", description = "Student nicht gefunden")
-    StudentModel getStudentByMatrikelnummer(@PathVariable final UUID matrikelnummer,
+    StudentModel getStudentByMatrikelnummer(@PathVariable final UUID id,
                                             final HttpServletRequest request) {
-        log.debug("getStudentByMatrikelnummer: matrikelnummer={}, Thread={}", matrikelnummer, Thread.currentThread());
+        log.debug("getStudentById: id={}, Thread={}", id, Thread.currentThread());
 
         //Geschäftslogik bzw. Anwendungskern
-        final var student = service.findStudentByMatrikelnummer(matrikelnummer);
+        final var student = service.findStudentById(id);
 
         //HATEOAS
         final var model = new StudentModel(student);
         // evtl. Forwarding von einem API-Gateway
         final var baseUri = uriHelper.getBaseUri(request).toString();
-        final var matrikelnummerUri = baseUri + '/' + student.getMatrikelnummer();
-        final var selfLink = Link.of(matrikelnummerUri);
+        final var idUri = baseUri + '/' + student.getId();
+        final var selfLink = Link.of(idUri);
         final var listLink = Link.of(baseUri, LinkRelation.of("list"));
         final var addLink = Link.of(baseUri, LinkRelation.of("add"));
-        final var updateLink = Link.of(matrikelnummerUri, LinkRelation.of("update"));
-        final var removeLink = Link.of(matrikelnummerUri, LinkRelation.of("remove"));
+        final var updateLink = Link.of(idUri, LinkRelation.of("update"));
+        final var removeLink = Link.of(idUri, LinkRelation.of("remove"));
         model.add(selfLink, listLink, addLink, updateLink, removeLink);
 
-        log.debug("getByMatrikelnummer: {}", matrikelnummer);
+        log.debug("getById: {}", id);
         return model;
     }
 }

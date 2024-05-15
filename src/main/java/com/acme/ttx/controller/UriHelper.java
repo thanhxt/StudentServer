@@ -1,14 +1,15 @@
-package com.acme.ttx.rest;
+package com.acme.ttx.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import java.net.URI;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import static com.acme.ttx.controller.StudentGetController.REST_PATH;
 
-import java.net.URI;
-
-import static com.acme.ttx.rest.StudentGetController.REST_PATH;
-
+/**
+ * Hilfsklasse um URIs für HATEOAS oder für URIs in ProblemDetail zu ermitteln, falls ein API-Gateway verwendet wird.
+ */
 @Component
 @Slf4j
 class UriHelper {

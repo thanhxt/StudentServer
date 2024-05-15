@@ -34,7 +34,7 @@ final class DB {
     static {
         STUDENTEN = Stream.of(
             Student.builder()
-                .matrikelnummer(UUID.fromString("00000000-0000-0000-0000-000000000001"))
+                .id(UUID.fromString("00000000-0000-0000-0000-000000000001"))
                 .name("Max")
                 .nachname("Hahn")
                 .adresse(Adresse.builder()
@@ -54,7 +54,7 @@ final class DB {
                 .module(List.of(SOFTWAREENGINEERING, MATHEMATIK_2))
                 .build(),
             Student.builder()
-                .matrikelnummer(UUID.fromString("00000000-0000-0000-0000-000000000002"))
+                .id(UUID.fromString("00000000-0000-0000-0000-000000000002"))
                 .name("Thomas")
                 .nachname("Müller")
                 .adresse(Adresse.builder()

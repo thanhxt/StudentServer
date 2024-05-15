@@ -39,15 +39,15 @@ public class StudentRepository {
     /**
      * Student zu einer gegebenen Matrikelnummer in der DB ermitteln.
      *
-     * @param matrikelnummer Matrikelnummer für die Suche
+     * @param id Matrikelnummer für die Suche
      * @return Gefundener Student oder leeres Optional
      */
-    public Optional<Student> findByMatrikelnummer(final UUID matrikelnummer) {
-        log.debug("findByMatrikelnummer: id={}", matrikelnummer);
+    public Optional<Student> findById(final UUID id) {
+        log.debug("findById: id={}", id);
         final var result = STUDENTEN.stream()
-            .filter(student -> Objects.equals(student.getMatrikelnummer(), matrikelnummer))
+            .filter(student -> Objects.equals(student.getId(), id))
             .findFirst();
-        log.debug("findByMatrikelnummer: {}", result);
+        log.debug("findById: {}", result);
         return result;
     }
 
@@ -203,7 +203,7 @@ public class StudentRepository {
      */
     public @NonNull Student create(final @NonNull Student student) {
         log.debug("create: {}", student);
-        student.setMatrikelnummer(randomUUID());
+        student.setId(randomUUID());
         STUDENTEN.add(student);
         log.debug("created: {}", student);
         return student;
@@ -218,7 +218,7 @@ public class StudentRepository {
         log.debug("update: {}", student);
         final OptionalInt index = IntStream
             .range(0, STUDENTEN.size())
-            .filter(i -> Objects.equals(STUDENTEN.get(i).getMatrikelnummer(), student.getMatrikelnummer()))
+            .filter(i -> Objects.equals(STUDENTEN.get(i).getId(), student.getId()))
             .findFirst();
         log.trace("update: index={}", student);
         if (index.isEmpty()) {

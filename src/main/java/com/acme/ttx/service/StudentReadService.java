@@ -25,15 +25,15 @@ public class StudentReadService {
     /**
      * Einen Studenten anhand seiner Matrikelnummer suchen.
      *
-     * @param matrikelnummer Die Matrikelnummer des gesuchten Studenten
+     * @param id Die Matrikelnummer des gesuchten Studenten
      * @return  Der gefundene Student
      * @throws NotFoundException Falls kein Student gefunden wurde
      */
-    public @NotNull Student findStudentByMatrikelnummer(final UUID matrikelnummer) {
-        log.debug("findByMatrikelnummer: matrikelnummer={}", matrikelnummer);
-        final var student = repo.findByMatrikelnummer(matrikelnummer)
-            .orElseThrow(() -> new NotFoundException(matrikelnummer));
-        log.debug("findByMatrikelnummer: matrikelnummer={}", student);
+    public @NotNull Student findStudentById(final UUID id) {
+        log.debug("findByMatrikelnummer: id={}", id);
+        final var student = repo.findById(id)
+            .orElseThrow(() -> new NotFoundException(id));
+        log.debug("findByMatrikelnummer: id={}", student);
         return student;
     }
 

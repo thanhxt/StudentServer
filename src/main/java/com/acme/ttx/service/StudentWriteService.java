@@ -44,24 +44,24 @@ public class StudentWriteService {
      * Einen vorhandenen Studenten aktualisieren.
      *
      * @param student das Objekt mit den neuen Daten (ohne Matrikelnummer)
-     * @param matrikelnummer Matrikelnummer des zu aktualisierenden Studenten
+     * @param id Matrikelnummer des zu aktualisierenden Studenten
      * @throws NotFoundException Kein Student zur Matrikelnummer vorhanden.
      * @throws EmailExistsException Es gibt bereits einen Studenten mit der E-Mail-Adresse.
      */
-    public void update(@Valid final Student student, final UUID matrikelnummer) {
+    public void update(@Valid final Student student, final UUID id) {
         log.debug("update: {}", student);
-        log.debug("update: matrikelnummer:{}", matrikelnummer);
+        log.debug("update: id:{}", id);
 
         final var email = student.getEmail();
         final var studentDB = repo
-            .findByMatrikelnummer(matrikelnummer)
-            .orElseThrow(() -> new NotFoundException(matrikelnummer));
+            .findById(id)
+            .orElseThrow(() -> new NotFoundException(id));
         if (!Objects.equals(email, studentDB.getEmail()) && repo.isEmailExisting(email)) {
             log.debug("update: email {} existiert", email);
             throw new EmailExistsException(email);
         }
 
-        student.setMatrikelnummer(matrikelnummer);
+        student.setId(id);
         repo.update(student);
     }
 }

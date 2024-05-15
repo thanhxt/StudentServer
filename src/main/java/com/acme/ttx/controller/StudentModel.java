@@ -1,4 +1,4 @@
-package com.acme.ttx.rest;
+package com.acme.ttx.controller;
 
 import com.acme.ttx.entity.Adresse;
 import com.acme.ttx.entity.Guthaben;
@@ -6,22 +6,24 @@ import com.acme.ttx.entity.ModuleType;
 import com.acme.ttx.entity.SemesterType;
 import com.acme.ttx.entity.Student;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.time.LocalDate;
+import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
-import java.time.LocalDate;
-import java.util.List;
-
-
+/**
+ * Model-Klasse für Spring HATEOAS. @lombok.Data fasst die Annotationsn @ToString, @EqualsAndHashCode, @Getter, @Setter
+ * und @RequiredArgsConstructor zusammen.
+ */
 @JsonPropertyOrder({
     "name", "nachname", "email", "geburtsdatum", "adresse",
     "guthaben", "semester", "module"
 })
 @Relation(collectionRelation = "studenten", itemRelation = "student")
-@EqualsAndHashCode(onlyExplicitlyIncluded = true ,callSuper = false)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Getter
 @ToString(callSuper = true)
 public class StudentModel  extends RepresentationModel<StudentModel> {

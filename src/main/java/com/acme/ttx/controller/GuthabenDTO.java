@@ -1,4 +1,4 @@
-package com.acme.ttx.rest;
+package com.acme.ttx.controller;
 
 import java.math.BigDecimal;
 import java.util.Currency;

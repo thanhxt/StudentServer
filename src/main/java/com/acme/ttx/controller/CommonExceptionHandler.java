@@ -1,4 +1,4 @@
-package com.acme.ttx.rest;
+package com.acme.ttx.controller;
 
 import com.acme.ttx.service.NotFoundException;
 import lombok.extern.slf4j.Slf4j;

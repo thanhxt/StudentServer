@@ -1,10 +1,5 @@
 package com.acme.ttx.entity;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Pattern;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -14,9 +9,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.apache.commons.lang3.builder.ToStringExclude;
-import org.hibernate.validator.constraints.UniqueElements;
 
-/**
+ /**
  * Daten eines Studenten.
  * <img src="../../../../../../../extras/doc/Student.png" alt="Klassendiagramm">
  *
@@ -27,10 +21,10 @@ import org.hibernate.validator.constraints.UniqueElements;
 @ToString
 public class Student {
     /**
-     * Die Matrikelnummer des Studenten.
+     * Die ID des Studenten.
      */
     @EqualsAndHashCode.Include
-    private UUID matrikelnummer;
+    private UUID id;
 
     /**
      * Nachname des Studenten.
@@ -48,27 +42,26 @@ public class Student {
     private String email;
 
     /**
-     * Das Geburtsdatum des Kunden.
+     * Das Geburtsdatum des Studenten.
      */
     private LocalDate geburtsdatum;
 
     /**
-     * Die Adresse des Kunden.
+     * Die Adresse des Studenten.
      */
     @ToString.Exclude
     private Adresse adresse;
 
-    /**
+     /**
+      * Semester des Studenten.
+      */
+     private SemesterType semester;
+
+     /**
      * Guthaben des Studenten.
      */
     @ToString.Exclude
     private List<Guthaben> guthaben;
-
-
-    /**
-     * Semester des Studenten.
-     */
-    private SemesterType semester;
 
     /**
      * Belegte Module des Studenten.

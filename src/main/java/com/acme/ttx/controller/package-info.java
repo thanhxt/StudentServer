@@ -1,4 +1,4 @@
 /**
  * Restschnittstelle für Studenten.
  */
-package com.acme.ttx.rest;
+package com.acme.ttx.controller;

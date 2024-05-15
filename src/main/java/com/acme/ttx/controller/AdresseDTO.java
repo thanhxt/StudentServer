@@ -1,9 +1,8 @@
-package com.acme.ttx.rest;
+package com.acme.ttx.controller;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-
 import static com.acme.ttx.entity.Adresse.PLZ_PATTERN;
 
 /**
