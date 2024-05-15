@@ -27,7 +27,7 @@ package com.acme.kunde {
 
     package service #DDDDDD {
         class StudentReadService << control >> << @Service >> {
-            + findStudentByMatrikelnummer(matrikelnummer: UUID): Student
+            + findStudentById(id: UUID): Student
             + find(queryParams: Map<String, List<String>>): List<Student>
             + findAllStudents(): Collection<Student>
         }

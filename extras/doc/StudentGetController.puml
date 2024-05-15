@@ -42,7 +42,7 @@ package com.acme.ttx {
         class StudentModel <<entity>>
 
         class StudentGetController << boundary >> << @RestController >> << @RequestMapping >> {
-            + @GetMapping getById(@PathVariable matrikelnummer: UUID, request: HttpServletRequest): StudentModel
+            + @GetMapping getById(@PathVariable id: UUID, request: HttpServletRequest): StudentModel
             + @GetMapping get(@RequestParam queryParams: MultiValueMap<String, String>, request: HttpServletRequest): CollectionModel<StudentModel>
         }
 

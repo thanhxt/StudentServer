@@ -22,7 +22,7 @@ package com.acme.ttx {
     package service #DDDDDD {
         class StudentWriteService << control >> << @Service >> {
             + create(student: Student): Student
-            + update(student: Student, matrikelnummer: UUID)
+            + update(student: Student, id: UUID)
         }
 
         StudentWriteService o--> "1" StudentRepository : repo

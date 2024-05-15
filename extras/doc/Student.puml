@@ -53,7 +53,7 @@ package com.acme.ttx.entity #DDDDDD {
     }
 
     class Student << entity >> {
-        matrikelnummer : UUID
+        id : UUID
         nachname : String
         name : String
         email : String

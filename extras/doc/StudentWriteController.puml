@@ -52,7 +52,7 @@ package com.acme.ttx {
 
         class StudentWriteController << boundary >> << @Controller >> << @RequestMapping >> {
             + @PostMapping post(@RequestBody StudentDTO: StudentDTO, request: HttpServletRequest): ResponseEntity<Void>
-            + @PutMapping put(@PathVariable matrikelnummer: UUID, @RequestBody StudentDTO: StudentDTO)
+            + @PutMapping put(@PathVariable id: UUID, @RequestBody StudentDTO: StudentDTO)
             + @ExceptionHandler onConstraintViolations(ex: ConstraintViolationsException, req: HttpServletRequest): ProblemDetail
             + @ExceptionHandler onEmailExists(ex: EmailExistsException, req: HttpServletRequest): ProblemDetail
         }
