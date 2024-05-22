@@ -3,6 +3,11 @@
   The aim of this project is to manage students in a database with simple HTTP-Requests using the RestAPI
 </div>
 
+# Requirements
+<li> Java 22.x</li>
+<li> Gradle 8.1.x</li>
+
+
 # Tools & Frameworks
 <div>
   Below is a list of Tools and Frameworks that were used. 
