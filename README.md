@@ -1,6 +1,6 @@
 # StudentServer
 <div>
-  The aim of this project is to manage students in a database.
+  The aim of this project is to manage students in a database with simple HTTP-Requests using the RestAPI
 </div>
 
 # Tools & Frameworks
