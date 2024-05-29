@@ -14,13 +14,13 @@
 </div>
 <br>
 <ul>
-  <li>Java</li>
   <li>Spring</li>
   <li>Spring Hateoas</li>
   <li>Spring Web MVC</li>
   <li>Jackson JSON</li>
   <li>REST API</li>
   <li>Hibernate Validator</li>
+  <li>Lombok</li>
   <li>SLF4J</li>
   <li>OpenAPI | SwaggerUI</li>
   <li>Docker</li>
