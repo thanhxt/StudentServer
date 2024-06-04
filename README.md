@@ -10,7 +10,7 @@
 
 # Tools & Frameworks
 <div>
-  Below is a list of Tools and Frameworks that were used. 
+  Below is a list of Tools and Frameworks that were used.
 </div>
 <br>
 <ul>
@@ -21,6 +21,7 @@
   <li>REST API</li>
   <li>Hibernate Validator</li>
   <li>Lombok</li>
+  <li>Jakarta Persistence</li>
   <li>SLF4J</li>
   <li>OpenAPI | SwaggerUI</li>
   <li>Docker</li>
