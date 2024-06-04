@@ -26,7 +26,7 @@
 //  2) Microservice als selbstausfuehrendes JAR oder Docker-Image erstellen und ausfuehren
 //        .\gradlew bootJar
 //        java -jar build/libs/....jar
-//        .\gradlew bootBuildImage
+//        .\gradlew bootBuildImage [-Pbuildpack=azul-zulu|-Pbuildpack=bellsoft]
 //
 //  3) Tests und Codeanalyse
 //        .\gradlew test jacocoTestReport [-Dtest=rest-get] [--rerun-tasks]
@@ -55,7 +55,7 @@
 //
 //  8) Projektreport erstellen
 //        .\gradlew projectReport
-//        .\gradlew dependencyInsight --dependency spring-security-rsa
+//        .\gradlew dependencyInsight --dependency jakarta.persistence-api
 //        .\gradlew dependencies
 //        .\gradlew dependencies --configuration runtimeClasspath
 //        .\gradlew buildEnvironment
@@ -81,7 +81,7 @@
 //
 //  14) Initialisierung des Gradle Wrappers in der richtigen Version
 //      dazu ist ggf. eine Internetverbindung erforderlich
-//        gradle wrapper --gradle-version=8.8-rc-1 --distribution-type=bin
+//        gradle wrapper --gradle-version=8.8-rc-2 --distribution-type=bin
 
 // https://github.com/gradle/kotlin-dsl/tree/master/samples
 // https://docs.gradle.org/current/userguide/kotlin_dsl.html
@@ -280,11 +280,12 @@ configurations.checkstyle {
 dependencies {
     implementation(platform("org.slf4j:slf4j-bom:${libs.versions.slf4j.get()}"))
     implementation(platform("org.apache.logging.log4j:log4j-bom:${libs.versions.log4j2.get()}"))
-    //implementation(platform("io.prometheus:prometheus-metrics-bom:${libs.versions.prometheusMetrics.get()}"))
-    //implementation(platform("io.micrometer:micrometer-bom:${libs.versions.micrometer.get()}"))
-    //implementation(platform("io.micrometer:micrometer-tracing-bom:${libs.versions.micrometerTracing.get()}"))
     //implementation(platform("io.zipkin.reporter2:zipkin-reporter-bom:${libs.versions.zipkinReporter.get()}"))
     //implementation(platform("io.zipkin.brave:brave-bom:${libs.versions.brave.get()}"))
+    //implementation(platform("io.micrometer:micrometer-tracing-bom:${libs.versions.micrometerTracing.get()}"))
+    implementation(platform("io.prometheus:prometheus-metrics-bom:${libs.versions.prometheusMetrics.get()}"))
+    //implementation(platform("io.prometheus:simpleclient_bom:${libs.versions.prometheusMetrics.get()}"))
+    //implementation(platform("io.micrometer:micrometer-bom:${libs.versions.micrometer.get()}"))
     //implementation(platform("com.fasterxml.jackson:jackson-bom:${libs.versions.jackson.get()}"))
     //implementation(platform("io.netty:netty-bom:${libs.versions.netty.get()}"))
     //implementation(platform("io.projectreactor:reactor-bom:${libs.versions.reactorBom.get()}"))
@@ -294,8 +295,8 @@ dependencies {
     //implementation(platform("org.springframework.security:spring-security-bom:${libs.versions.springSecurity.get()}"))
     //implementation(platform("ch.qos.logback:logback-parent:${libs.versions.logback.get()}"))
 
-    //testImplementation(platform("org.assertj:assertj-bom:${libs.versions.assertj.get()}"))
-    //testImplementation(platform("org.mockito:mockito-bom:${libs.versions.mockito.get()}"))
+    testImplementation(platform("org.assertj:assertj-bom:${libs.versions.assertj.get()}"))
+    testImplementation(platform("org.mockito:mockito-bom:${libs.versions.mockito.get()}"))
     testImplementation(platform("org.junit:junit-bom:${libs.versions.junitJupiter.get()}"))
     testImplementation(platform("io.qameta.allure:allure-bom:${libs.versions.allureBom.get()}"))
 
@@ -344,17 +345,23 @@ dependencies {
     runtimeOnly("org.flywaydb:flyway-mysql")
 
     implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
     implementation("org.springframework.security:spring-security-crypto")
-    implementation("org.springframework.boot:spring-boot-starter-mail")
+
     implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-mail")
 
     // Tracing durch Micrometer und Visualisierung durch Zipkin
     if (useTracing) {
         println("")
-        println("Tracing mit Zipkin aktiviert")
+        println("Tracing mit   Z i p k i n   aktiviert")
         println("")
         implementation("io.micrometer:micrometer-tracing-bridge-brave")
         implementation("io.zipkin.reporter2:zipkin-reporter-brave")
+    } else {
+        println("")
+        println("Tracing mit   Z i p k i n   d e a k t i v i e r t")
+        println("")
     }
 
     // Metriken durch Micrometer und Visualisierung durch Prometheus/Grafana
@@ -365,10 +372,7 @@ dependencies {
     // https://piotrminkowski.com/2023/09/05/speed-up-java-startup-on-kubernetes-with-crac
     // https://github.com/CRaC/example-spring-boot
     // https://github.com/sdeleuze/spring-boot-crac-demo
-    if (project.properties["crac"] == true) {
-        println("CRaC aktiviert")
-        implementation("org.crac:crac:${libs.versions.crac.get()}")
-    }
+    //implementation("org.crac:crac:${libs.versions.crac.get()}")
 
     compileOnly("org.projectlombok:lombok")
     implementation("org.mapstruct:mapstruct:${libs.versions.mapstruct.get()}")
@@ -426,10 +430,9 @@ dependencies {
 
         //implementation("org.springframework.hateoas:spring-hateoas:${libs.versions.springHateoas.get()}")
         //implementation("org.springframework.graphql:spring-graphql:${libs.versions.springGraphQL.get()}")
-        //implementation("org.springframework.security:spring-security-rsa:${libs.versions.springSecurityRsa.get()}")
 
         //runtimeOnly("org.postgresql:postgresql:${libs.versions.postgresql.get()}")
-        //runtimeOnly("com.mysql:mysql-connector-j:${libs.versions.mysql.get()}")
+        runtimeOnly("com.mysql:mysql-connector-j:${libs.versions.mysql.get()}")
         //runtimeOnly("com.h2database:h2:${libs.versions.h2.get()}")
         implementation("jakarta.persistence:jakarta.persistence-api:${libs.versions.jakartaPersistence.get()}")
         //implementation("com.zaxxer:HikariCP:${libs.versions.hikaricp.get()}") // NOSONAR
@@ -506,11 +509,21 @@ tasks.named("bootJar", org.springframework.boot.gradle.tasks.bundling.BootJar::c
     exclude("private-key.pem", "certificate.crt", ".reloadtrigger")
 
     doLast {
+        // CDS = Class Data Sharing seit Spring Boot 3.3.0
+        // https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-3.3.0-M3-Release-Notes#cds-support
+        // https://docs.spring.io/spring-framework/reference/integration/cds.html
         println(
             """
             |
-            |Aufruf der ausfuehrbaren JAR-Datei:
+            |Aufruf der ausfuehrbaren JAR-Datei mit CDS (= Class Data Sharing):
+            |java -Djarmode=tools -jar build/libs/${project.name}-${project.version}.jar extract
+            |java -Djarmode=tools --enable-preview -jar ${project.name}-${project.version}/${project.name}-${project.version}.jar `
+            |     --spring.profiles.active=dev `
+            |     --spring.ssl.bundle.pem.microservice.keystore.private-key=./src/main/resources/private-key.pem `
+            |     --spring.ssl.bundle.pem.microservice.keystore.certificate=./src/main/resources/certificate.crt `
+            |     --spring.ssl.bundle.pem.microservice.truststore.certificate=./src/main/resources/certificate.crt [--debug]
             |
+            |Aufruf der ausfuehrbaren JAR-Datei ohne CDS:
             |java --enable-preview -jar build/libs/${project.name}-${project.version}.jar `
             |     --spring.profiles.active=dev `
             |     --spring.ssl.bundle.pem.microservice.keystore.private-key=./src/main/resources/private-key.pem `
@@ -602,7 +615,7 @@ tasks.named("bootBuildImage", org.springframework.boot.gradle.tasks.bundling.Boo
             )
             imageName = "${imageName.get()}-azul"
             println("")
-            println("Buildpacks: JVM durch Azul Zulu")
+            println("Buildpacks: JVM durch   A z u l   Z u l u")
             println("")
         }
         "adoptium" -> {
@@ -615,7 +628,7 @@ tasks.named("bootBuildImage", org.springframework.boot.gradle.tasks.bundling.Boo
             )
             imageName = "${imageName.get()}-eclipse"
             println("")
-            println("Buildpacks: JVM durch Eclipse Temurin")
+            println("Buildpacks: JVM durch   E c l i p s e   T e m u r i n")
             println("")
         }
         "sap-machine" -> {
@@ -627,25 +640,22 @@ tasks.named("bootBuildImage", org.springframework.boot.gradle.tasks.bundling.Boo
             )
             imageName = "${imageName.get()}-sapmachine"
             println("")
-            println("Buildpacks: JVM durch SapMachine")
+            println("Buildpacks: JVM durch   S a p M a c h i n e")
             println("")
         }
         else -> {
-            // Bellsoft Liberica: JRE 8, 11, 17 (default, siehe buildpack.toml: BP_JVM_VERSION), 21
+            // Bellsoft Liberica: JRE 8, 11, 17 (default, siehe buildpack.toml: BP_JVM_VERSION), 21, 22
             // https://github.com/paketo-buildpacks/bellsoft-liberica/releases
-            // TODO https://github.com/paketo-buildpacks/bellsoft-liberica/issues/565
+            imageName = "${imageName.get()}-bellsoft"
             println("")
-            println("Buildpacks: JVM durch Bellsoft Liberica (default)")
+            println("Buildpacks: JVM durch   B e l l s o f t   L i b e r i c a   (default)")
             println("")
 
-            // Amazon Coretto: nur JDK, *kein* JRE
-            // https://github.com/paketo-buildpacks/amazon-corretto/releases
-            // Oracle: nur JDK oder GraalVM, *kein* JRE
-            // https://github.com/paketo-buildpacks/oracle/releases
-            // Microsoft OpenJDK: nur JDK, *kein* JRE
-            // https://github.com/paketo-buildpacks/microsoft-openjdk/releases
-            // Alibaba Dragonwell: nur JDK, *kein* JRE
-            // https://github.com/paketo-buildpacks/alibaba-dragonwell/releases
+            // *kein* JRE, nur JDK:
+            // Amazon Coretto     https://github.com/paketo-buildpacks/amazon-corretto/releases
+            // Oracle             https://github.com/paketo-buildpacks/oracle/releases
+            // Microsoft OpenJDK  https://github.com/paketo-buildpacks/microsoft-openjdk/releases
+            // Alibaba Dragonwell https://github.com/paketo-buildpacks/alibaba-dragonwell/releases
         }
     }
 
@@ -824,12 +834,19 @@ tasks.named("spotbugsMain", com.github.spotbugs.snom.SpotBugsTask::class.java) {
     excludeFilter = file(excludePath)
 }
 
+modernizer {
+    toolVersion = libs.versions.modernizer.get()
+    includeTestClasses = true
+}
+
 // https://docs.sonarqube.org/latest/analyzing-source-code/scanners/sonarscanner-for-gradle/#analyzing
 // https://docs.sonarsource.com/sonarqube/latest/analyzing-source-code/languages/java
 // https://docs.sonarsource.com/sonarqube/latest/analyzing-source-code/test-coverage/java-test-coverage/#gradle-project
 sonarqube {
     properties {
         property("sonar.organization", "Softwarearchitektur und Microservices")
+        property("sonar.projectDescription", "Beispiel fuer Softwarearchitektur")
+        property("sonar.projectVersion", "2024.04.0")
         property("sonar.host.url", "http://localhost:9000")
         property("sonar.token", project.properties["sonarToken"]!!)
         property("sonar.scm.disabled", "true")

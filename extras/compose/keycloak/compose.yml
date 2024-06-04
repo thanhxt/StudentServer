@@ -30,7 +30,7 @@
 
 services:
   keycloak:
-    image: keycloak/keycloak:24.0.3-0
+    image: keycloak/keycloak:24.0.4
     #depends_on: [db]
     ports:
       - published: 8880
