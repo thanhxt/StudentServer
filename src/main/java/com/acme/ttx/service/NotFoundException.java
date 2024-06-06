@@ -20,9 +20,9 @@ public final class NotFoundException extends RuntimeException {
      */
     private final Map<String, List<String>> suchkriterien;
 
-    NotFoundException(final UUID matrikelnummer) {
-        super("Kein Studenten mit der Matrikelnummer " + matrikelnummer + " gefunden");
-        this.id = matrikelnummer;
+    NotFoundException(final UUID id) {
+        super("Kein Studenten mit der Id " + id + " gefunden");
+        this.id = id;
         this.suchkriterien = null;
     }
 
@@ -30,6 +30,12 @@ public final class NotFoundException extends RuntimeException {
         super("Keinen Studenten gefunden");
         id = null;
         this.suchkriterien = suchkriterien;
+    }
+
+    NotFoundException() {
+        super("Keine Studenten gefunden");
+        id = null;
+        suchkriterien = null;
     }
 
 }

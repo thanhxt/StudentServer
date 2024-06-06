@@ -1,7 +1,7 @@
 package com.acme.ttx.service;
 
 import com.acme.ttx.entity.Student;
-import com.acme.ttx.repository.StudentRepository;
+import com.acme.ttx.repository.StudentRepositoryOld;
 import jakarta.validation.Valid;
 import java.util.Objects;
 import java.util.UUID;
@@ -19,7 +19,7 @@ import org.springframework.validation.annotation.Validated;
 @RequiredArgsConstructor
 @Slf4j
 public class StudentWriteService {
-    private final StudentRepository repo;
+    private final StudentRepositoryOld repo;
 
     /**
      * Einen neuen Studenten anlegen.
