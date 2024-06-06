@@ -31,7 +31,7 @@ public class Guthaben {
     @Id
     @GeneratedValue
     private UUID id;
-    /**
+        /**
      * Der Betrag beim Guthaben.
      */
     private BigDecimal betrag;

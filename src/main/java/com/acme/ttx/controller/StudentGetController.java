@@ -1,7 +1,7 @@
 package com.acme.ttx.controller;
 
 import com.acme.ttx.entity.Student;
-import com.acme.ttx.service.StudentReadService;
+import com.acme.ttx.service.StudentReadServiceOld;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -50,7 +50,7 @@ public class StudentGetController {
     /**
      * Pfad um Matrikelnummer zu suchen.
      */
-    private final StudentReadService service;
+    private final StudentReadServiceOld service;
     private final UriHelper uriHelper;
 
     /**
