@@ -43,8 +43,7 @@ public class StudentReadService {
 
         if (!rollen.contains(ADMIN)) {
             // nicht admin, aber keine eigene (oder keine Kundendaten)
-            // TODO: AccessForbiddenException Klasse schreiben
-            throw new NotFoundException(id);
+            throw new AccessForbiddenException(rollen);
         }
 
         // admin: Studentendaten evtl. nicht gefunden
