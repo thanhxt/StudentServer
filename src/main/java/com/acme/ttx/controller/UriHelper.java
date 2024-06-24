@@ -5,7 +5,7 @@ import java.net.URI;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import static com.acme.ttx.controller.StudentGetController.REST_PATH;
+import static com.acme.ttx.controller.StudentGetControllerOld.REST_PATH;
 
 /**
  * Hilfsklasse um URIs für HATEOAS oder für URIs in ProblemDetail zu ermitteln, falls ein API-Gateway verwendet wird.
