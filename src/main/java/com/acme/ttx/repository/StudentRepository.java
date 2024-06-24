@@ -88,14 +88,13 @@ public interface StudentRepository extends JpaRepository<Student, UUID>, JpaSpec
         GROUP BY s.nachname
         """)
     @EntityGraph(ADRESSE_GRAPH)
-    @NonNull
     List<Student> findByNachname(CharSequence nachname);
 
     @Query("""
-        SELECT s
+        SELECT s.nachname
         FROM #{#entityName} s
         WHERE    lower(s.nachname) LIKE concat(lower(:prefix), '%')
         ORDER BY s.nachname
         """)
-    List<Student> findNachnamenByPrefix(String prefix);
+    List<String> findNachnamenByPrefix(String prefix);
 }
