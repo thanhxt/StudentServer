@@ -36,7 +36,9 @@ public class Mailer {
     private String mailhost;
 
     @Async
+    @SuppressWarnings({"CatchParameterName", "IllegalIdentifierName", "LocalFinalVariableName"})
     public void send (final Student neuerStudent) {
+
         if (!SMTP_ACTIVATED) {
             log.warn("SMTP ist deaktiviert.");
         }

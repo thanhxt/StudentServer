@@ -2,7 +2,7 @@ package com.acme.ttx.controller;
 
 import com.acme.ttx.controller.StudentDTO.OnCreate;
 import com.acme.ttx.service.EmailExistsException;
-import com.acme.ttx.service.StudentWriteService;
+import com.acme.ttx.service.StudentWriteServiceOld;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -44,7 +44,7 @@ import static org.springframework.http.ResponseEntity.created;
 @SuppressWarnings({"ClassFanOutComplexity", "java:S1075", "java:S6856"})
 class StudentWriteController {
     private static final String PROBLEM_PATH = "/problem/";
-    private final StudentWriteService service;
+    private final StudentWriteServiceOld service;
     private final StudentMapper mapper;
     private final UriHelper uriHelper;
 
