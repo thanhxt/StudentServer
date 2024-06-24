@@ -16,6 +16,8 @@
  */
 package com.acme.ttx.security;
 
+import java.util.stream.Stream;
+
 /**
  * String-Konstante für Rollen.
  */
@@ -33,5 +35,12 @@ public enum Rolle {
     /**
      * Die Rolle ACTUATOR.
      */
-    ACTUATOR
+    ACTUATOR;
+
+    public static Rolle of(final String str) {
+        return Stream.of(values())
+            .filter(rolle -> rolle.name().equalsIgnoreCase(str))
+            .findFirst()
+            .orElse(null);
+    }
 }
