@@ -85,7 +85,6 @@ public class StudentReadService {
             throw new NotFoundException();
         }
         log.debug("findNachnamenByPrefix: {}", nachnamen);
-        // TODO: return nacnnamen funktioniert nicht
-        return null;
+        return nachnamen;
     }
 }
