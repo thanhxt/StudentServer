@@ -15,13 +15,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import static com.acme.ttx.security.Rolle.ADMIN;
 
+/**
+ * Anwendungslogik für den Studenten.
+ * <img src="../../../../../../../extras/doc/StudentReadService.png" alt="Klassendiagramm">
+ */
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Slf4j
 public class StudentReadService {
     private final StudentRepository repo;
-
 
 
     public @NonNull Student findById(
