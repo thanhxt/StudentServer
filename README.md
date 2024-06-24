@@ -6,7 +6,7 @@
 
 # Requirements
 <li> Java 22.x</li>
-<li> Gradle 8.1.x</li>
+<li> Gradle 8.8.x</li>
 
 # Tools & Frameworks
 
