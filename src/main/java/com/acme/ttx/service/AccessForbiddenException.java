@@ -1,19 +1,19 @@
-package com.acme.student.service;
+package com.acme.ttx.service;
 
-// TODO: Security Rolle erstellen
-import com.acme.student.security.Rolle;
+import com.acme.ttx.security.Rolle;
+import lombok.Getter;
+
 import java.util.Collection;
-import lobok.Getter;
 
 @Getter
-public class AccessforbiddenException extends RuntimeException {
+public class AccessForbiddenException extends RuntimeException {
     /**
      * Vorhandene Rolle.
      */
-    final Collection <Rolle> rollen;
+    private final Collection<Rolle> rollen;
 
-    @SurpressWarnings("ParameterHidesMemberVariable")
-    AccessforbiddenException(final Collection<Rolle> rollen) {
+    @SuppressWarnings("ParameterHidesMemberVariable")
+    AccessForbiddenException(final Collection<Rolle> rollen) {
         super("Unzureichende Rollen: " + rollen);
         this.rollen = rollen;
     }
