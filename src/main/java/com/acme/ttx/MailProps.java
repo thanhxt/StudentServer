@@ -16,3 +16,4 @@ public record MailProps(
     String from,
 
     @DefaultValue("Maxi Musterfrau <maxi.musterfrau@test.de>") String sales) {
+}
