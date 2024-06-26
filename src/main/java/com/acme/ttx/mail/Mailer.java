@@ -4,18 +4,16 @@ package com.acme.ttx.mail;
 import com.acme.ttx.MailProps;
 import com.acme.ttx.entity.Student;
 import jakarta.mail.internet.InternetAddress;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailAuthenticationException;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-
-import java.util.Objects;
-
 import static jakarta.mail.Message.RecipientType.TO;
 
 /**
@@ -27,7 +25,8 @@ import static jakarta.mail.Message.RecipientType.TO;
 @SuppressWarnings("ClassNamePrefixedWithPackageName")
 public class Mailer {
     @SuppressWarnings("BooleanVariableAlwaysNegated")
-    private static final boolean SMTP_ACTIVATED = Objects.equals(System.getenv("SMTP_ACTIVATED"), "true");
+    private static final boolean SMTP_ACTIVATED = Objects.equals(System.getenv("SMTP_ACTIVATED"), "true") ||
+        Objects.equals(System.getProperty("smtp-activated"), "true");
 
     private final JavaMailSender mailSender;
     private final MailProps props;
