@@ -9,6 +9,8 @@ import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 import java.time.LocalDate;
 import java.util.List;
+
+import lombok.Builder;
 import org.hibernate.validator.constraints.UniqueElements;
 
 /**
@@ -24,24 +26,35 @@ import org.hibernate.validator.constraints.UniqueElements;
  * @param semester Semester eines Studenten
  * @param module Belegte Module eines Studenten
  */
+@Builder
 public record StudentDTO(
     @NotNull
     @Pattern(regexp = NACHNAME_PATTERN)
     String nachname,
+
     @NotNull
     @Pattern(regexp = VORNAME_PATTERN)
     String name,
+
     @Email
     String email,
+
     @Past
     LocalDate geburtsdatum,
+
     @Valid
     @NotNull
     AdresseDTO adresse,
+
     List<GuthabenDTO> guthaben,
+
     SemesterType semester,
+
     @UniqueElements
-    List<ModuleType> module
+    List<ModuleType> module,
+
+    String username,
+    String password
 ) {
     /**
      * Muster für einen gültigen Nachnamen.
