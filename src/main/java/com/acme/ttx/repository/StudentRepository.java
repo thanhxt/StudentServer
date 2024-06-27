@@ -1,7 +1,6 @@
 package com.acme.ttx.repository;
 
 
-import com.acme.ttx.entity.Adresse;
 import com.acme.ttx.entity.Student;
 import lombok.NonNull;
 import org.springframework.data.jpa.domain.Specification;
