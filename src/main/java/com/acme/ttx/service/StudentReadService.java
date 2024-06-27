@@ -2,12 +2,15 @@ package com.acme.ttx.service;
 
 
 import com.acme.ttx.entity.Student;
+import com.acme.ttx.repository.SpecificationBuilder;
 import com.acme.ttx.repository.StudentRepository;
 import com.acme.ttx.security.Rolle;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import io.micrometer.observation.annotation.Observed;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,8 +28,49 @@ import static com.acme.ttx.security.Rolle.ADMIN;
 @Slf4j
 public class StudentReadService {
     private final StudentRepository repo;
+    private final SpecificationBuilder specificationBuilder;
 
 
+    /**
+     * Studenten anhand von Suchkriterien als Collection suchen.
+     *
+     * @param suchkriterien Die Suchkriterien
+     * @return Die gefundenen Studenten oder eine leere Liste
+     * @throws NotFoundException - falls keine Studenten gefunden wurden
+     */
+    @SuppressWarnings({"ReturnCount", "NestedIfDepth"})
+    public Collection<Student> find(@NonNull final Map<String, List<String>> suchkriterien) {
+        log.debug("find: suchkriterien={}", suchkriterien);
+
+        if (suchkriterien.isEmpty()) {
+            return repo.findAll();
+        }
+
+        if (suchkriterien.size() == 1) {
+            final var nachnamen = suchkriterien.get("nachnamen");
+            if (nachnamen != null && nachnamen.size() == 1) {
+                return findByNachname(nachnamen.getFirst(), suchkriterien);
+            }
+
+            final var emails = suchkriterien.get("email");
+            if (emails != null && emails.size() == 1) {
+                return findByEmail(emails.getFirst(), suchkriterien);
+            }
+        }
+
+        final var specification = specificationBuilder
+            .build(suchkriterien)
+            .orElseThrow(() -> new NotFoundException(suchkriterien));
+
+        final var studenten = repo.findAll(specification);
+        if (studenten.isEmpty()) {
+            throw new NotFoundException(suchkriterien);
+        }
+        log.debug("find {}", studenten);
+        return studenten;
+    }
+
+    @Observed(name = "find-By-id")
     public @NonNull Student findById(
         final UUID id,
         final String username,
