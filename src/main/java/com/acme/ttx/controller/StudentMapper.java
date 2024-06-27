@@ -22,6 +22,10 @@ interface StudentMapper {
      * @return Konvertiertes Studenten-Objekt mit null als Matrikelnummer
      */
     @Mapping(target = "id", ignore = true)
+    @Mapping(target ="version", ignore = true)
+    @Mapping(target = "erzeugt", ignore = true)
+    @Mapping(target = "aktualisiert", ignore = true)
+    @Mapping(target = "moduleStr", ignore = true)
     Student toStudent(StudentDTO dto);
 
     /**
@@ -30,6 +34,7 @@ interface StudentMapper {
      * @param dto DTO-Objekt für AdresseDTO ohne Student
      * @return Konvertiertes Adresse-Objekt
      */
+    @Mapping(target = "id", ignore = true)
     Adresse toAdresse(AdresseDTO dto);
 
     /**
@@ -38,5 +43,6 @@ interface StudentMapper {
      * @param dto DTO-Objekt für GuthabenDTO ohne Student
      * @return Konvertiertes Guthaben-Objekt
      */
+    @Mapping(target = "id", ignore = true)
     Guthaben toGuthaben(GuthabenDTO dto);
 }
