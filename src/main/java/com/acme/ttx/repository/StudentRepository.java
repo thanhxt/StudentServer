@@ -26,6 +26,7 @@ import static com.acme.ttx.entity.Student.ADRESSE_GUTHABEN_GRAPH;
 public interface StudentRepository extends JpaRepository<Student, UUID>, JpaSpecificationExecutor<Student> {
     @EntityGraph(ADRESSE_GRAPH)
     @NonNull
+    @Override
     List<Student> findAll();
 
     @EntityGraph(ADRESSE_GRAPH)
