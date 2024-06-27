@@ -8,6 +8,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import jakarta.validation.groups.Default;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ProblemDetail;
@@ -22,12 +26,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Optional;
-import java.util.UUID;
-
 import static com.acme.ttx.controller.StudentGetControllerOld.ID_PATTERN;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.PRECONDITION_FAILED;
@@ -50,9 +48,7 @@ import static org.springframework.http.ResponseEntity.noContent;
 @Slf4j
 public class StudentWriteController {
     public static final String PROBLEM_PATH = "/problem/";
-
     private static final String VERSIONSNUMMER_FEHLT = "Versionsnummer fehlt";
-
     private final StudentWriteService service;
     private final StudentMapper mapper;
     private final UriHelper uriHelper;
@@ -80,7 +76,6 @@ public class StudentWriteController {
         final var location = new URI(baseUri.toString() + '/' + student.getId());
         return created(location).build();
     }
-
 
     /**
      * Einen vorhandenen Studenten
